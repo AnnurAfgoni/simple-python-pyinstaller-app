@@ -55,6 +55,7 @@ pipeline {
             }
             steps {
                 sh 'pyinstaller --onefile sources/add2vals.py'
+                echo 'Deployment completed successfully.'
             }
         }
     }
