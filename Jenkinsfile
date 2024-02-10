@@ -37,7 +37,7 @@ pipeline {
                             choice(choices: 'Proceed\nAbort', description: 'Pilih opsi', name: 'approvalChoice')
                         ]
                     )
-                    if (userInput.approvalChoice == "Proceed"){
+                    if (userInput == "Proceed"){
                         echo "continuing..."
                     } else {
                         currentBuild.result = "ABORTED"
