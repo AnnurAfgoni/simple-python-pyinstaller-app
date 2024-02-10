@@ -53,6 +53,9 @@ pipeline {
                     image 'cdrx/pyinstaller-linux:python3'
                     inside "--entrypoint=''" 
                 }
+                inside{
+                    "--entrypoint=''" 
+                }
             }
             steps {
                 sh 'pyinstaller --onefile sources/add2vals.py'
