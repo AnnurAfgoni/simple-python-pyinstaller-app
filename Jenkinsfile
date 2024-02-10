@@ -34,13 +34,7 @@ pipeline {
                         id: "manualApproval",
                         message: "Lanjutkan ke tahap Deploy?",
                         parameters: [
-                            [
-                                $class: 'ChoiceParameter', 
-                                choiceType: 'Radio',
-                                description: 'Pilih opsi',
-                                name: 'approvalChoice',
-                                choices: 'Proceed\nAbort'
-                            ]
+                            choice(choices: 'Proceed\nAbort', description: 'Pilih opsi', name: 'approvalChoice')
                         ]
                     )
                     if (userInput.approvalChoice == "Proceed"){
