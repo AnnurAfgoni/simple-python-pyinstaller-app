@@ -26,6 +26,27 @@ pipeline {
                 }
             }
         }
+
+        stage("Manual Approval"){
+            steps{
+                script{
+                    def userInput = input(
+                        id: "approvemanual",
+                        message: "Lanjutkan ke tahap Deploy?",
+                        parameters: [
+                            choice(choices: "Proceed\nAbort", description: "Pilih opsi", name: "approvalChoice")
+                        ]
+                    )
+                    if (userInput.approvalChoice == "Proceed"){
+                        echo "continuing..."
+                    } else {
+                        currentBuild.result = "ABORTED"
+                        error("Aborted by user")
+                    }
+                }
+            }
+        }
+
         stage('Deploy') {
             agent {
                 docker {
