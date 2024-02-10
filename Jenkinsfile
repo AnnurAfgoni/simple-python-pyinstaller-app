@@ -31,7 +31,7 @@ pipeline {
             steps{
                 script{
                     def userInput = input(
-                        id: "approvemanual",
+                        id: "manualApproval",
                         message: "Lanjutkan ke tahap Deploy?",
                         parameters: [
                             [
