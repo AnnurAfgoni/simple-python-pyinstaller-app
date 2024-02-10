@@ -37,7 +37,11 @@ pipeline {
             }
             post {
                 success {
+                    echo 'Build and Test Successful - Ready for Deployment'
                     archiveArtifacts 'dist/add2vals'
+                }
+                failure {
+                    echo 'Build or Test Failed - Check the logs for details'
                 }
             }
         }
