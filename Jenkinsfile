@@ -14,7 +14,7 @@ node {
         junit 'test-reports/results.xml'
     }
     stage('Deploy') {
-        def VOLUME = "${pwd()}/sources:/src"
+        def VOLUME = "${pwd()}/sources:/"
         def BUILD_ID = env.BUILD_ID
         def IMAGE = IMAGE_PYINSTALLER
         node {
