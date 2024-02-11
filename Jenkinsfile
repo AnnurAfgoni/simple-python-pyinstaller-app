@@ -34,8 +34,8 @@ pipeline {
         stage('Deploy') {
             agent {
                 docker {
-                    file 'Dockerfile'
-                    args '--network=host'
+                    filename 'Dockerfile'
+                    additionalBuildArgs '--network=host'
                 }
             }
             steps {
