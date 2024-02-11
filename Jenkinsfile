@@ -20,16 +20,14 @@ node {
     }
     stage('Deploy') {
         docker.image('cdrx/pyinstaller-linux:python2').inside {
-            try {
-                sh 'pyinstaller --onefile sources/add2vals.py'
-            } catch (Exception e) {
-                echo 'Error: ' + e.toString()
-            } finally {
-                success {
-                    archiveArtifacts 'dist/add2vals'
-                    sleep 60
-                }
+            env.VOLUME = "${pwd()}/sources:/src"
+            env.IMAGE = 'cdrx/pyinstaller-linux:python2'
+            dir(env.BUILD_ID) {
+                unstash(name: 'compiled-results')
+                sh "docker run --rm -v ${env.VOLUME} ${env.IMAGE} 'pyinstaller -F add2vals.py'"
             }
+            archiveArtifacts "sources/dist/add2vals"
+            sh "docker run --rm -v ${env.VOLUME} ${env.IMAGE} 'rm -rf build dist'"
         }
     }
 }
