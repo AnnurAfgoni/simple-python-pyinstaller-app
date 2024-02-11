@@ -40,8 +40,8 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'pip install pyinstaller'
-                    sh 'pyinstaller --onefile sources/add2vals.py'
+                    sh 'pip install --user pyinstaller'
+                    sh '$HOME/.local/bin/pyinstaller --onefile sources/add2vals.py'
                 }
             }
             post {
