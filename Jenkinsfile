@@ -1,7 +1,8 @@
 pipeline {
-    agent any
-    options {
-        skipStagesAfterUnstable()
+    agent {
+        docker {
+            image 'python:3'
+        }
     }
     stages {
         stage('Build') {
