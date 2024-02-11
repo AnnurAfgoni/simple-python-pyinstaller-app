@@ -47,6 +47,7 @@ pipeline {
             }
             post {
                 success {
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
                     archiveArtifacts "${BUILD_ID}/sources/dist/add2vals"
                 }
             }
