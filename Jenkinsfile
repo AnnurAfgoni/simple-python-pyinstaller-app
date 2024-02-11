@@ -40,8 +40,6 @@ pipeline {
                             choice(choices: 'Proceed\nAbort', description: 'Pilih opsi', name: 'approvalChoice')
                         ]
                     )
-
-                    // Check user input
                     if (userInput == 'Proceed') {
                         echo 'User selected Proceed. Continuing to Deploy stage.'
                     } else {
