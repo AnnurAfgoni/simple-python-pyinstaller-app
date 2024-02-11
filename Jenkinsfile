@@ -39,7 +39,7 @@ pipeline {
             }
             steps {
                 script {
-                    def VOLUME = "${pwd()}/sources:/src"
+                    def VOLUME = "${pwd()}/sources"
                     def BUILD_ID = env.BUILD_ID
 
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
