@@ -11,7 +11,9 @@ pipeline {
                 }
             }
             steps {
-                sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+                script {
+                    sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+                }
             }
         }
         stage('Test') {
@@ -32,12 +34,14 @@ pipeline {
         stage('Deploy') {
             agent {
                 docker {
-                    image 'cdrx/pyinstaller-linux:python2' 
+                    image 'cdrx/pyinstaller-linux:python2'
                     args '-v $PWD:/var/jenkins_home/workspace/submission-cicd-pipeline-BudiSetiawan'
                 }
             }
             steps {
-                sh 'pyinstaller --onefile sources/add2vals.py'
+                script {
+                    sh 'pyinstaller --onefile sources/add2vals.py'
+                }
             }
             post {
                 success {
