@@ -40,6 +40,7 @@ pipeline {
             }
             steps {
                 script {
+                    sh 'apk add --update py-pip'
                     sh 'pip install pyinstaller'
                     sh 'pyinstaller --onefile sources/add2vals.py'
                 }
