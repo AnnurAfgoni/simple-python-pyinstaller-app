@@ -1,54 +1,33 @@
-pipeline {
-    agent none
-    options {
-        skipStagesAfterUnstable()
-    }
-    stages {
-        stage('Build') {
-            agent {
-                docker {
-                    image 'python:3.11.4-alpine3.18'
-                }
-            }
-            steps {
-                script {
-                    sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-                }
-            }
+node {
+    stage('Build') {
+        docker.image('python:2-alpine').inside {
+            sh 'python -m py_compile sources/add2vals.py sources/calc.py'
         }
-        stage('Test') {
-            agent {
-                docker {
-                    image 'qnib/pytest'
-                }
-            }
-            steps {
-                sh 'py.test --junit-xml test-reports/results.xml sources/test_calc.py'
-            }
-            post {
+    }
+    stage('Test') {
+        docker.image('qnib/pytest').inside {
+            try {
+                sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+            } catch (Exception e) {
+                echo 'Error: ' + e.toString()
+            } finally {
                 always {
                     junit 'test-reports/results.xml'
                 }
+                input message: 'Lanjutkan ke tahap Deploy? (Click "Proceed" to continue)'
             }
         }
-        stage('Deploy') {
-            agent {
-                docker {
-                    image 'cdrx/pyinstaller-linux:python3'
-                }
-            }
-            steps {
-                script {
-                    def VOLUME = "${pwd()}/sources"
-                    def BUILD_ID = env.BUILD_ID
-
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
-                }
-            }
-            post {
+    }
+    stage('Deploy') {
+        docker.image('cdrx/pyinstaller-linux:python2').inside {
+            try {
+                sh 'pyinstaller --onefile sources/add2vals.py'
+            } catch (Exception e) {
+                echo 'Error: ' + e.toString()
+            } finally {
                 success {
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
-                    archiveArtifacts "${BUILD_ID}/sources/dist/add2vals"
+                    archiveArtifacts 'dist/add2vals'
+                    sleep 60
                 }
             }
         }
