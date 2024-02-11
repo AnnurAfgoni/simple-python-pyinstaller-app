@@ -34,14 +34,13 @@ pipeline {
         stage('Deploy') {
             agent {
                 docker {
-                    image 'python:3-alpine'
-                    args "--entrypoint=''"
+                    file 'Dockerfile'
+                    args '--network=host'
                 }
             }
             steps {
                 script {
-                    sh 'pip install --user pyinstaller'
-                    sh '$HOME/.local/bin/pyinstaller --onefile sources/add2vals.py'
+                    sh 'pyinstaller --onefile sources/add2vals.py'
                 }
             }
             post {
