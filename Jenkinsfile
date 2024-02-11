@@ -30,6 +30,28 @@ pipeline {
                 }
             }
         }
+        stage('Manual Approval') {
+            steps {
+                script {
+                    def userInput = input(
+                        id: 'manualApproval',
+                        message: 'Lanjutkan ke tahap Deploy?',
+                        parameters: [
+                            choice(choices: 'Proceed\nAbort', description: 'Pilih opsi', name: 'approvalChoice')
+                        ]
+                    )
+
+                    // Check user input
+                    if (userInput == 'Proceed') {
+                        echo 'User selected Proceed. Continuing to Deploy stage.'
+                    } else {
+                        echo 'User selected Abort. Aborting pipeline execution.'
+                        currentBuild.result = 'ABORTED'
+                        error('Pipeline execution aborted by user.')
+                    }
+                }
+            }
+        }
         stage('Deploy') { 
             agent any
             environment { 
